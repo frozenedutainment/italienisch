@@ -1,0 +1,37 @@
+ottimo:optimal,wort,0
+esatto:exakt,wort,0
+corretto:korrekt,wort,0
+non fa niente:Keine Sorge,Idiom,0
+di niente:Kein Problem,Idiom,0
+sotto:unter,wort,0
+fare:machen,verb,faccio*fai*fa*facciamo*fate*fanno*fare,irregular,2
+andare:gehen,verb,vado*vai*va*andiamo*andate*vanno*andare,irregular,1
+pensare:denken,verb,penso*pensi*pensa*pensiamo*pensate*pensano*pensare,regular,8
+
+
+
+
+###
+liberia
+certo
+vieni
+pure
+eccola
+per
+
+
+essere:sein,verb,sono*sei*è*siamo*siete*sono*essere,0
+avere:haben,verb,ho*hai*ha*abbiamo*avete*hanno*avere,0
+andare:gehen,verb,vado*vai*va*andiamo*andate*vanno*andare,irregular,1
+potere:können,verb,posso*puoi*può*possiamo*potete*possono*potere,0
+volere:wollen,verb,voglio*vuoi*vuole*vogliamo*volete*vogliono*volere,0
+dovere:müssen,verb,devo*devi*deve*dobbiamo*dovete*devono*dovere,0
+sapere:wissen,verb,so*sai*sa*sappiamo*sapete*sanno*sapere,0
+stare:stehen/befinden,verb,sto*stai*sta*stiamo*state*stanno*stare,0
+uscire:ausgehen,verb,esco*esci*esce*usciamo*uscite*escono*uscire,0
+venire:kommen,verb,vengo*vieni*viene*veniamo*venite*vengono*venire,0
+dire:sagen,verb,dico*dici*dice*diciamo*dite*dicono*dire,0
+mangiare:essen,verb,mangio*mangi*mangia*mangiamo*mangiate*mangiano*mangiare,0
+parlare:sprechen,verb,parlo*parli*parla*parliamo*parlate*parlano*parlare,0
+vedere:sehen,verb,vedo*vedi*vede*vediamo*vedete*vedono*vedere,0
+prendere:nehmen,verb,prendo*prendi*prende*prendiamo*prendete*prendono*prendere,0
