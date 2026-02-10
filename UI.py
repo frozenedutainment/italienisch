@@ -107,7 +107,7 @@ class UI:
                         all_correct = False
 
                 if all_correct:
-                    self.daten.IncreaseRanking(st.session_state.selectedVerb, "verb", 2)
+                    self.daten.IncreaseRanking(st.session_state.selectedVerb, 2)
                     st.balloons()
 
     def MiniGamePage(self, mode="all"):
@@ -151,7 +151,7 @@ class UI:
                     antwort_text = f"**Richtig!** 🎉 '{prompt}' ist korrekt."
 
                     # WICHTIG: session_state nutzen!
-                    self.daten.IncreaseRanking(st.session_state.selectedVerb, "verb", 1)
+                    self.daten.IncreaseRanking(st.session_state.selectedVerb, 1)
 
                     if st.session_state.streak % 5 == 0:
                         st.balloons()
@@ -297,6 +297,121 @@ class UI:
                         st.write(self.daten.Konjugation (VerbSelektor,n))
 
             self.spacer(10)
+
+    def AbfragePage(self):
+        # --- CALLBACK FUNKTIONEN (Müssen am Anfang stehen) ---
+
+        def handle_check():
+            """Logik für den Eintippen-Modus"""
+            user_input = st.session_state.inputtext.strip().lower()
+            if user_input == st.session_state.aktuell_korrekt:
+                # Ranking für das alte Wort erhöhen, BEVOR es ausgetauscht wird
+                self.daten.IncreaseRanking(st.session_state.RandomWort, type="Rating", value=1)
+
+                # Neues Wort laden
+                st.session_state.RandomWort = self.daten.getRandomWort(type="all")
+                st.session_state.inputtext = ""
+                st.session_state.feedback = "richtig"
+            else:
+                st.session_state.feedback = "falsch"
+                st.session_state.inputtext = ""
+
+        def handle_kartei():
+            """Logik für den Karteikarten-Modus"""
+            if st.session_state.phase == "frage":
+                st.session_state.phase = "antwort"
+            else:
+                st.session_state.RandomWort = self.daten.getRandomWort(type="all")
+                st.session_state.phase = "frage"
+
+        # --- INITIALISIERUNG ---
+        if "phase" not in st.session_state:
+            st.session_state.phase = "frage"
+
+        if "RandomWort" not in st.session_state:
+            st.session_state.RandomWort = self.daten.getRandomWort(type="all")
+
+        AbfrageOptionen = ["Eintippen", "Karteikarte"]
+
+        st.title("Vokabel Abfrage")
+
+        # --- SELEKTOREN ---
+        col_sel1, col_sel2 = st.columns(2)
+        with col_sel1:
+            RichtungSelector = st.selectbox("Sprache", ["Deutsch", "Italienisch"])
+        with col_sel2:
+            ModusSelector = st.selectbox("Modus", AbfrageOptionen)
+
+        # --- WORTERMITTLUNG ---
+        if RichtungSelector == "Deutsch":
+            RichtungsWort = self.daten.getÜbersetzung(st.session_state.RandomWort)
+            korrekt = st.session_state.RandomWort.strip().lower()
+        else:
+            RichtungsWort = st.session_state.RandomWort
+            korrekt = self.daten.getÜbersetzung(st.session_state.RandomWort).strip().lower()
+
+        # Aktuelle Lösung für Callbacks zwischenspeichern
+        st.session_state.aktuell_korrekt = korrekt
+
+        self.spacer(20)
+
+        # --- LAYOUT LOGIK ---
+        if ModusSelector == "Eintippen":
+            col_main1, col_main2 = st.columns([1, 1])
+        else:
+            col_empty1, col_main1, col_empty2 = st.columns([1, 2, 1])
+
+        # --- LINKER BEREICH / KARTE ---
+        with col_main1:
+            with st.container(border=True):
+                self.spacer(80)
+                if ModusSelector == "Karteikarte" and st.session_state.phase == "antwort":
+                    st.markdown(
+                        f"<div style='text-align: center; font-size: 26px; font-weight: bold; color: #2e7bcf;'>{korrekt}</div>",
+                        unsafe_allow_html=True)
+                else:
+                    st.markdown(
+                        f"<div style='text-align: center; font-size: 26px; font-weight: bold;'>{RichtungsWort}</div>",
+                        unsafe_allow_html=True)
+                self.spacer(80)
+
+                if ModusSelector == "Karteikarte":
+                    label = "Lösung zeigen" if st.session_state.phase == "frage" else "Nächstes Wort"
+                    st.button(label, use_container_width=True, on_click=handle_kartei)
+
+        # --- RECHTER BEREICH (NUR EINTIPPEN) ---
+        if ModusSelector == "Eintippen":
+            with col_main2:
+                with st.container(border=True):
+                    self.spacer(80)
+                    st.text_input("Eintippen", key="inputtext", label_visibility="collapsed", on_change=handle_check)
+                    self.spacer(65)
+
+                c1, c2 = st.columns(2)
+                with c1:
+                    st.button("Check", use_container_width=True, on_click=handle_check)
+                with c2:
+                    if st.button("New Wort", use_container_width=True):
+                        st.session_state.RandomWort = self.daten.getRandomWort(type="all")
+                        st.rerun()
+
+        # --- FEEDBACK ANZEIGE ---
+        if "feedback" in st.session_state:
+            self.spacer(10)
+            if st.session_state.feedback == "richtig":
+                self.daten.IncreaseRanking(st.session_state.RandomWort,"Rating", 1)
+                st.toast("Richtig! 🌟")
+                st.success("Sehr gut!")
+            else:
+                st.error(f"Falsch!")
+
+            # Feedback nach Anzeige löschen
+            del st.session_state.feedback
+
+        self.spacer(50)
+
+
+
 
 
 
