@@ -25,7 +25,7 @@ class data:
 
     def decode(self):
 
-        self.type = ["wort", "idiom", "verb"]
+        self.type = ["wort", "idiom", "verb", "all"]
         self.words = self.opendata()
 
         self.dictionary = {}
@@ -76,6 +76,15 @@ class data:
                     raise IndexError("Format bei verb (Konjugation) falsch", wort)
 
         return self.dictionary
+
+    def getAlleWörter(self):
+        return self.dictionary.keys()
+
+    def getÜbersetzung(self,wort):#
+        return self.dictionary[wort]["Übersetzung"]
+
+
+
 
     def Konjugation(self, verb, Pronomen):
         try:
@@ -128,7 +137,7 @@ class data:
         PronomenListe = ["io", "tu", "lui/lei", "noi", "voi", "loro"]
         return PronomenListe
 
-    def ChangeStat(self, wort, type, var, new_value):
+    def ChangeStat(self, wort, var, new_value):
 
         neue_zeilen = []
 
@@ -143,7 +152,7 @@ class data:
 
 
                 try:
-                    if type == "verb":
+                    if self.dictionary[wort]["Type"] == "verb":
                         HashWort = {"Übersetzung" : parts[0], "Type" : parts[1], "Konjugation" : parts[2], "Verb_Typ" : parts[3], "Rating" : parts[4]}
                     else:
                         HashWort = {"Übersetzung": parts[0], "Type": parts[1], "Rating": parts[2]}
@@ -155,7 +164,7 @@ class data:
                     grr = HashWort.values()
                     neue_zeile = ",".join(HashWort.values()) + "\n"
                     neue_zeilen.append(neue_zeile)
-                    print(neue_zeile)
+
             else:
                 neue_zeilen.append(zeile)
 
@@ -180,11 +189,12 @@ class data:
             currentranking += value
             self.dictionary[wort]["Rating"] = currentranking
             try:
-                self.ChangeStat( wort, type, "Rating", str(currentranking))
+                self.ChangeStat( wort, type,  str(currentranking))
                 return True
             except:
                 "check input"
                 return False
+
     def getRandomWort(self, type = "all", mode = "all"):
         r = 0
         Formel = 1/(2**r)
@@ -203,6 +213,15 @@ class data:
                 prob = 1/(2**r)
                 prop_tup = (n, prob)
                 OutputList.append(prop_tup)
+
+        if type == "all":
+            self.all_words = self.getAlleWörter()
+            for n in self.all_words:
+                r = int(self.dictionary[n]["Rating"])
+                prob = 1 / (2 ** r)
+                prop_tup = (n, prob)
+                OutputList.append(prop_tup)
+
 
         worte, gewichte = zip(*OutputList)
         auswahl = random.choices(worte, weights=gewichte, k=1)[0]
@@ -223,7 +242,8 @@ class data:
 
 d = data("words.txt")
 d.decode()
-d.VerbListe("irr")
-print(d.getRandomWort(type = "verb", mode = "all"))
+#d.VerbListe("irr")
+print(d.getAlleWörter())
+#print(d.getRandomWort(type = "all", mode = "Deutsch"))
 
 
