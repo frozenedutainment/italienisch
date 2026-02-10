@@ -51,6 +51,9 @@ class Webiste:
 
         if auswahl_italienisch == "Lernen":
             self.ui.LernenKonjugation()
+
+        if auswahl_italienisch == "Abfrage":
+            self.ui.AbfragePage()
         ######################################################################
 
 Webiste()
