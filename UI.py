@@ -37,13 +37,13 @@ class UI:
         print(response.json())
 
     def TrainingPage(self, mode):
-        # Initialisierung des Session States
-        if "selectedVerb" not in st.session_state:
-            st.session_state.selectedVerb = self.daten.VerbListe("all")[0]  # Startwert setzen
 
-        # Callback-Funktion für den Button
+        if "selectedVerb" not in st.session_state:
+            st.session_state.selectedVerb = self.daten.VerbListe("all")[0]
+
+
         def handle_generate():
-            # Modus aus dem Radio-Button lesen (wir geben dem Radio einen Key)
+
             selected_mode = st.session_state.radio_choice
             if selected_mode == "irregular":
                 m = "irr"
@@ -274,24 +274,25 @@ class UI:
 
         # Optional: Eine Info-Box für die visuelle Trennung
         st.info("Die Endungen der drei Verbgruppen (-are, -ere, -ire) sind farblich markiert.")
-
-
+        st.divider()
+        st.title("Konjugation für spezielle Verben")
+        self.spacer(25)
         VerbSelektor = st.selectbox("VerbSelector", self.daten.VerbListe())
 
-        self.spacer(50)
+        self.spacer(25)
         with st.container(border = True):
             self.spacer(10)
-            col1, col2 = st.columns([1,5])
+
             p = self.daten.PronomenListe()
 
 
             for n in p:
+                col1, col2 = st.columns([1, 5])
                 with col1:
                     st.markdown(f"<div style='padding-top: 10px; font-size: 20px; font-weight: bold;'>{n}</div>", unsafe_allow_html=True)
                     self.spacer(15)
 
-            with col2:
-                for n in p:
+                with col2:
                     with st.container(border = True):
                         st.write(self.daten.Konjugation (VerbSelektor,n))
 
