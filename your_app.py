@@ -23,13 +23,13 @@ class Webiste:
                 menu_icon="translate",
                 default_index=0,
             )
-        with st.sidebar:
-            auswahl_ToDo = option_menu(
-                menu_title="To-Dos",
-                options=["To-Do", "Kalender", "Einkaufen", "Lernen"],
-                menu_icon="translate",
-                default_index=0,
-            )
+        #with st.sidebar:
+        #    auswahl_ToDo = option_menu(
+        #        menu_title="To-Dos",
+        #        options=["To-Do", "Kalender", "Einkaufen", "Lernen"],
+        #        menu_icon="translate",
+        #        default_index=0,
+        #    )
         ########################################################################
         if auswahl_italienisch == "Verben":
 
@@ -49,8 +49,6 @@ class Webiste:
             if sub_auswahl == "Mini-Game":
                 self.ui.MiniGamePage("all")
 
-        if auswahl_italienisch == "To-Do":
-            self.ui.ToDo()
         if auswahl_italienisch == "Lernen":
             self.ui.LernenKonjugation()
         ######################################################################
