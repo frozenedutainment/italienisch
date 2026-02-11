@@ -4,6 +4,7 @@ from streamlit_option_menu import option_menu
 import random
 import DataAnalysis
 from DataAnalysis import data as D
+from DataAnalysis import ExampleSentence as E
 
 import requests
 
@@ -18,6 +19,9 @@ class UI:
 
 
         self.daten = D("words.txt")
+        self.Sätze = E("Sätze.txt")
+
+        self.DS = self.Sätze.decode()
         datadict = self.daten.decode()
 
 
@@ -107,7 +111,7 @@ class UI:
                         all_correct = False
 
                 if all_correct:
-                    self.daten.IncreaseRanking(st.session_state.selectedVerb, 2)
+                    self.daten.IncreaseRanking(st.session_state.selectedVerb, "Rating",1)
                     st.balloons()
 
     def MiniGamePage(self, mode="all"):
@@ -409,6 +413,61 @@ class UI:
             del st.session_state.feedback
 
         self.spacer(50)
+
+    def SatzbauSpiel(self):
+        st.title("Satzbau Spiel")
+
+        if "Satz" not in st.session_state:
+            st.session_state.Satz = self.Sätze.getRandomSatz()
+            st.session_state.GewählteWörter = []
+            st.session_state.Shuffled = self.Sätze.ShuffleSatz(st.session_state.Satz)
+
+        st.subheader(self.Sätze.dictionary[st.session_state.Satz]["Übersetzung"])
+
+        upper_container = st.container(border=True)
+
+        # Auswahl-Container
+        with st.container(border=True):
+            cols = st.columns(len(st.session_state.Shuffled))
+            for i, wort in enumerate(st.session_state.Shuffled):
+                with cols[i]:
+                    vokabel_hint = self.daten.dictionary.get(wort, {}).get("Übersetzung", "Kein Hinweis verfügbar")
+                    if st.button(wort, key=f"src_{i}", use_container_width=True, help = vokabel_hint ):
+
+                        st.session_state.GewählteWörter.append(wort)
+                        st.rerun()
+
+        # Anzeige-Container
+        with upper_container:
+            if st.session_state.GewählteWörter:
+                cols_up = st.columns(len(st.session_state.GewählteWörter))
+                for i, wort in enumerate(st.session_state.GewählteWörter):
+                    cols_up[i].button(wort, key=f"up_{i}", use_container_width=True)
+            else:
+                st.write("Wähle die Wörter in der richtigen Reihenfolge:")
+
+        # PRÜFUNG
+        if len(st.session_state.GewählteWörter) == len(self.Sätze.dictionary[st.session_state.Satz]["Reihenfolge"]):
+            if st.session_state.GewählteWörter == self.Sätze.dictionary[st.session_state.Satz]["Reihenfolge"]:
+                st.success("Richtig!")
+                st.balloons()
+
+                if st.button("Nächster Satz"):
+                    # Alles zurücksetzen für die nächste Runde
+                    del st.session_state.Satz
+                    del st.session_state.GewählteWörter
+                    del st.session_state.Shuffled
+                    st.rerun()
+            else:
+                st.error("Leider falsch. Versuch es nochmal!")
+                if st.button("Zurücksetzen"):
+                    st.session_state.GewählteWörter = []
+                    st.rerun()
+
+
+
+
+
 
 
 
