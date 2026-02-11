@@ -19,7 +19,7 @@ class Webiste:
         with st.sidebar:
             auswahl_italienisch = option_menu(
                 menu_title="Italienisch",
-                options=["Verben", "Abfrage", "Chat","Lernen"],
+                options=["Verben", "Abfrage", "Chat","Lernen","Satzbau"],
                 menu_icon="translate",
                 default_index=0,
             )
@@ -54,6 +54,9 @@ class Webiste:
 
         if auswahl_italienisch == "Abfrage":
             self.ui.AbfragePage()
+
+        if auswahl_italienisch == "Satzbau":
+            self.ui.SatzbauSpiel()
         ######################################################################
 
 Webiste()
