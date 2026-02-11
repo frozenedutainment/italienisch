@@ -310,12 +310,3 @@ class ExampleSentence:
 
 
 
-d = data("words.txt")
-d.decode()
-#d.VerbListe("irr")
-#print(d.getType("adverb"))
-print(d.getRandomWort(type = "all", mode = "Deutsch"))
-
-E = ExampleSentence("Sätze.txt")
-E.decode()
-print(E.ShuffleSatz(E.getRandomSatz()))
