@@ -25,7 +25,7 @@ class data:
 
     def decode(self):
 
-        self.type = ["wort", "idiom", "verb", "all"]
+        self.type = ["wort", "idiom", "verb", "adverb", "all"]
         self.words = self.opendata()
 
         self.dictionary = {}
@@ -41,7 +41,7 @@ class data:
             splitted = self.splitted
 
 
-            if "wort" in splitted or "Idiom" in splitted:
+            if "wort" in splitted or "Idiom" in splitted or "adverb" in splitted:
                 wort = splitted[0].split(":")
                 try:
                     if wort[0] not in self.dictionary:
@@ -79,6 +79,20 @@ class data:
 
     def getAlleWörter(self):
         return self.dictionary.keys()
+
+    def getType(self, Type):
+
+        returnList = []
+
+        if Type not in self.type:
+            raise ValueError("pls select valid type")
+
+        for n in self.dictionary:
+            if self.dictionary[n]["Type"] == Type:
+                returnList.append(n)
+
+        return returnList
+
 
     def getÜbersetzung(self,wort):#
         return self.dictionary[wort]["Übersetzung"]
@@ -204,7 +218,7 @@ class data:
             print("pls type in valid mode")
 
         if type not in self.type:
-            print("pls type in valid type")#
+            print("pls type in valid type")
 
         if type == "verb":
             self.all_verbs = self.VerbListe(mode = mode)
@@ -231,6 +245,62 @@ class data:
 
 
 
+class ExampleSentence:
+    def __init__(self,filename):
+        self.d = data("Sätze.txt")
+        self.filename = filename
+
+    def opendata(self):
+        with (open(self.filename, "r", encoding="utf-8") as f):
+            self.Sätze = f.read()
+            return self.Sätze
+
+    def decode(self):
+        self.dictionary = {}
+        self.opendata()
+        Zeilen = self.Sätze.split("\n")
+        for Zeile in Zeilen:
+            splitted = Zeile.split(":")
+            self.dictionary[splitted[0]] = {"Übersetzung" : splitted[1],
+                                            "Reihenfolge" : splitted[0].lower().split(),
+                                            "Rating" : splitted[2],
+                                            "Länge" : len(splitted[0].split())
+                                            }
+
+        return self.dictionary
+
+    def getAlleSätze(self):
+        return self.dictionary.keys()
+
+    def getRandomSatz(self):
+        r = 0
+        Formel = 1 / (2 ** r)
+        OutputList = []
+
+        self.all_Sätze = self.getAlleSätze()
+
+        for n in self.all_Sätze:
+            r = int(self.dictionary[n]["Rating"])
+            prob = 1 / (2 ** r)
+            prop_tup = (n, prob)
+            OutputList.append(prop_tup)
+
+        worte, gewichte = zip(*OutputList)
+        auswahl = random.choices(worte, weights=gewichte, k=1)[0]
+        return auswahl
+
+    def getÜbersetzung(self,wort):
+        return self.dictionary[wort]["Übersetzung"]
+
+    def ShuffleSatz(self, wort):
+
+        woerter = self.dictionary[wort]["Reihenfolge"]
+
+
+        shuffled = random.sample(woerter, len(woerter))
+
+        return shuffled
+
 
 
 
@@ -243,7 +313,9 @@ class data:
 d = data("words.txt")
 d.decode()
 #d.VerbListe("irr")
-print(d.getAlleWörter())
-#print(d.getRandomWort(type = "all", mode = "Deutsch"))
+#print(d.getType("adverb"))
+print(d.getRandomWort(type = "all", mode = "Deutsch"))
 
-
+E = ExampleSentence("Sätze.txt")
+E.decode()
+print(E.ShuffleSatz(E.getRandomSatz()))
