@@ -4,7 +4,7 @@ corretto:korrekt,wort,0
 non fa niente:macht nichts,Idiom,0
 di niente:Kein Problem,Idiom,0
 sotto:unter,wort,0
-fare:machen,verb,faccio*fai*fa*facciamo*fate*fanno*fare,irregular,0
+fare:machen,verb,faccio*fai*fa*facciamo*fate*fanno*fare,irregular,1
 andare:gehen,verb,vado*vai*va*andiamo*andate*vanno*andare,irregular,0
 pensare:denken,verb,penso*pensi*pensa*pensiamo*pensate*pensano*pensare,regular,0
 libreria:Buchhandlung,wort,0
@@ -34,3 +34,36 @@ famiglia:Familie,wort,0
 giorno:Tag,wort,0
 amico:Freund,wort,0
 scuola:Schule,wort,0
+qui:hier,adverb,0
+lì:dort,adverb,0
+qua:hierher,adverb,0
+là:dorthin,adverb,0
+su:oben,adverb,0
+giù:unten,adverb,0
+fuori:draußen,adverb,0
+dentro:drinnen,adverb,0
+vicino:nah,adverb,0
+lontano:weit,adverb,0
+sopra:darüber,adverb,0
+sotto:darunter,adverb,0
+davanti:vorne,adverb,0
+dietro:hinten,adverb,0
+oggi:heute,adverb,0
+ieri:gestern,adverb,0
+domani:morgen,adverb,0
+adesso:jetzt,adverb,0
+ora:nun,adverb,0
+allora:dann,adverb,0
+mai:nie,adverb,0
+sempre:immer,adverb,0
+spesso:oft,adverb,0
+raramente:selten,adverb,0
+presto:früh,adverb,0
+tardi:spät,adverb,0
+prima:vorher,adverb,0
+dopo:nacher,adverb,0
+ancora:noch,adverb,0
+già:schon,adverb,0
+
+###
+sapere
