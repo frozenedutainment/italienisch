@@ -259,7 +259,13 @@ class ExampleSentence:
         self.dictionary = {}
         self.opendata()
         Zeilen = self.Sätze.split("\n")
+
         for Zeile in Zeilen:
+            if Zeile == "###":
+                break
+            if not Zeile.strip():
+                continue
+
             splitted = Zeile.split(":")
             self.dictionary[splitted[0]] = {"Übersetzung" : splitted[1],
                                             "Reihenfolge" : splitted[0].lower().split(),
